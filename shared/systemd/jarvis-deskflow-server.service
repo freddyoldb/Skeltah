@@ -1,0 +1,14 @@
+[Unit]
+Description=JARVIS Deskflow KVM Server
+After=graphical-session.target network.target
+
+[Service]
+Type=simple
+User=frederik
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/deskflow --server --config /home/frederik/.config/deskflow/deskflow.conf --no-daemon
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=graphical-session.target

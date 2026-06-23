@@ -1,0 +1,16 @@
+[Unit]
+Description=JARVIS Brain Core (Ollama)
+After=network.target ollama.service
+
+[Service]
+Type=simple
+User=frederik
+WorkingDirectory=/home/frederik/jarvis
+ExecStart=/usr/bin/python3 /home/frederik/Skeltah/master/brain/jarvis_voice.py --no-voice
+Restart=on-failure
+RestartSec=5
+StandardInput=tty
+TTYPath=/dev/tty2
+
+[Install]
+WantedBy=multi-user.target

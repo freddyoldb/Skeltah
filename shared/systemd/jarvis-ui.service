@@ -1,0 +1,15 @@
+[Unit]
+Description=JARVIS OS UI (Node1)
+After=graphical-session.target
+
+[Service]
+Type=simple
+User=user
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/user/.Xauthority
+ExecStart=/usr/bin/python3 /home/user/Skeltah/node1/ui/jarvis_ui.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=graphical-session.target
