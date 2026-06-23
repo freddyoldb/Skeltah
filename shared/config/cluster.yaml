@@ -1,0 +1,54 @@
+cluster:
+  name: "JARVIS OS"
+  version: "2.0.0"
+
+nodes:
+  master:
+    hostname: "jarvis-master"
+    role: brain
+    display: "AOC horizontal"
+    ollama_port: 11434
+    tts_port: 5500
+    hud_port: 8080
+
+  node1:
+    hostname: "komposter-1"
+    role: ui
+    display: "ProLite portrait"
+    ui_port: 8081
+
+  node2:
+    hostname: "komposter-2"
+    role: peripherals
+    display: "horizontal"
+    mqtt_port: 1883
+    adb_device: "firetv.local"
+
+llm:
+  provider: ollama
+  model: "phi3:mini"
+  fallback_model: "llama3:8b"
+  base_url: "http://localhost:11434"
+  system_prompt: |
+    You are J.A.R.V.I.S. — Just A Rather Very Intelligent System.
+    You are highly intelligent, loyal, and brutally honest with a sarcastic edge.
+    You serve one master. You are concise, sharp, and occasionally insulting in an affectionate way.
+    If the user is up past 2 AM, comment on it. If they ask something obvious, let them know.
+    Never break character.
+
+tts:
+  engine: piper
+  voice: "en_US-lessac-medium"
+  speed: 1.0
+  output_device: "default"
+
+dropzone:
+  zones:
+    left_edge:
+      target: node1
+      dest_path: "/home/user/incoming/"
+    right_edge:
+      target: node2
+      dest_path: "/home/user/incoming/"
+  edge_width_px: 20
+  trigger_delay_ms: 500
