@@ -1,22 +1,42 @@
 #!/bin/bash
-# Portrait-Rotation für PC2 Monitor (HDMI-1)
-# Ausführen direkt am PC2 als benutzer im Terminal
+# ============================================================
+# NODE 2 Portrait-Rotation — Monitor rechts, hochkant gedreht
+# Erkennt automatisch den richtigen Output
+# Usage: bash set_portrait.sh [left|right]  (default: left)
+# ============================================================
 
-# Methode 1: GNOME Display Config (Wayland-nativ)
-gdbus call --session \
-  --dest org.gnome.Mutter.DisplayConfig \
-  --object-path /org/gnome/Mutter/DisplayConfig \
-  --method org.gnome.Mutter.DisplayConfig.GetCurrentState 2>/dev/null | \
-  python3 -c "
-import sys, json
-data = sys.stdin.read()
-print('Display state erhalten')
-" || true
+ROTATION="${1:-left}"
 
-# Methode 2: Über GNOME Settings GUI
-echo ""
-echo "Falls obiges nicht klappt:"
-echo "1. Einstellungen → Bildschirme → HDMI-1 → Ausrichtung: Links"
-echo ""
-echo "Methode 3: gnome-randr (falls installiert)"
-which gnome-randr 2>/dev/null && gnome-randr modify HDMI-1 --rotate 90 || true
+echo "[Portrait] Suche aktiven Monitor-Output..."
+
+# Aktiven Output automatisch erkennen (connected + hat Auflösung)
+OUTPUT=$(xrandr --query | awk '/connected/ && /[0-9]+x[0-9]+/ {print $1; exit}')
+
+if [ -z "$OUTPUT" ]; then
+    # Fallback: ersten connected Output nehmen
+    OUTPUT=$(xrandr --query | awk '/ connected/ {print $1; exit}')
+fi
+
+if [ -z "$OUTPUT" ]; then
+    echo "[FEHLER] Kein Monitor-Output gefunden!"
+    echo "Verfügbare Outputs:"
+    xrandr --query | grep " connected"
+    exit 1
+fi
+
+echo "[Portrait] Output: $OUTPUT  →  Rotation: $ROTATION"
+xrandr --output "$OUTPUT" --rotate "$ROTATION"
+echo "[Portrait] Fertig."
+
+# Dauerhaft via autostart speichern
+AUTOSTART_DIR="$HOME/.config/autostart"
+mkdir -p "$AUTOSTART_DIR"
+cat > "$AUTOSTART_DIR/set-portrait.desktop" << EOF
+[Desktop Entry]
+Type=Application
+Name=Set Portrait Rotation
+Exec=xrandr --output $OUTPUT --rotate $ROTATION
+Hidden=false
+X-GNOME-Autostart-enabled=true
+EOF
+echo "[Portrait] Autostart eingetragen: $AUTOSTART_DIR/set-portrait.desktop"
