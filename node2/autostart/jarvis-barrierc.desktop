@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=JARVIS Barrier Client
+Comment=Verbindet zu Barrier-Server ubuntu3
+Exec=bash -c "sleep 5 && pgrep -x barrierc || DISPLAY=:1 XAUTHORITY=/run/user/$(id -u)/Xauthority /usr/bin/barrierc -f --no-tray --debug INFO --name benutzer-ESPRIMO-D757 --disable-crypto [192.168.178.44]:24800 >> /tmp/barrierc.log 2>&1"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true

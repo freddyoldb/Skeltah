@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=JARVIS Neural Memory Map
+Comment=3D-Gehirn-Visualisierung auf rechtem Monitor
+Exec=bash -c "sleep 15 && DISPLAY=:1 firefox --kiosk 'http://192.168.178.122:7777/brain' &"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true

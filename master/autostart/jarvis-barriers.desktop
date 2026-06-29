@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=JARVIS Barrier Server
+Comment=Barrier KVM-Server für 3-Screen-Setup
+Exec=bash -c "sleep 4 && pgrep -x barriers || DISPLAY=:0 XAUTHORITY=/run/user/$(id -u)/gdm/Xauthority /usr/bin/barriers -f --no-tray --debug INFO --name ubuntu3 --disable-crypto --disable-client-cert-checking -c /home/frederik/.config/barrier/barrier.conf --address :24800 >> /tmp/barrier_server.log 2>&1"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
